@@ -2,7 +2,7 @@
 
 const express = require("express");
 
-const data = require("./data.json");
+const data = require("./MovieData/data.json");
 
 const app = express();
 
@@ -14,7 +14,7 @@ function Movie(title, poster_path, overview) {
 
 };
 
-app.get('/home',homeHandler);
+app.get('/',homeHandler);
 
 app.get('/favorite', favoriteHandler);
 
