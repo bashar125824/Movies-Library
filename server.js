@@ -5,6 +5,7 @@ const express = require("express");
 const movies = require("./MovieData/data.json");
 const dotenv = require("dotenv");
 const axios = require("axios");
+const pg = require("pg");
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ const app = express();
 
 const MYAPIKEY = process.env.MYAPIKEY;
 const PORT = process.env.PORT;
+const DATABASE_URL = process.env.DATABASE_URL;
+
+const client = new pg.Client(DATABASE_URL);
 
 function Movie(id, title, release_date, poster_path, overview) {
 
@@ -22,6 +26,8 @@ function Movie(id, title, release_date, poster_path, overview) {
     this.overview = overview;
 
 };
+
+app.use(express.json());
 
 app.get('/', homeHandler);
 
@@ -35,11 +41,38 @@ app.get('/review', reviewHandler);
 
 app.get('/watch', watchHandler);
 
+
+app.get('/addMovie', addMovieHandler);
+
+app.get('/getMovie', getMovieHandler);
+
+
 app.use("*", notFoundHandler);
 
 app.use(errorHandler);
 
 
+function addMovieHandler(req, res) {
+    const movie = req.body;
+    console.log(movie);
+    const sql = `INSERT INTO movieTable(title, release_date, poster_path , overview) VALUES($1, $2, $3, $4) RETURNING *`
+    const values = [movie.title, movie.release_date, movie.poster_path, movie.overview]
+    client.query(sql, values).then((result) => {
+        return res.status(201).json(result.rows);
+    })
+
+
+};
+
+function getMovieHandler(req, res) {
+    const sql = `SELECT * FROM movieTable`;
+
+    client.query(sql).then((result) => {
+        return res.status(200).json(result.rows);
+    }).catch((error) => {
+        errorHandler(error, req, res);
+    });
+};
 
 function trendingHandler(req, res) {
 
@@ -164,7 +197,7 @@ function notFoundHandler(requesting, responsing) {
 
 
 
-
+client.connect();
 
 app.listen(PORT, () => {
     console.log(`Listen on ${PORT}`);
