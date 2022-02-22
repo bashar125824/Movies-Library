@@ -42,7 +42,7 @@ app.get('/review', reviewHandler);
 app.get('/watch', watchHandler);
 
 
-app.get('/addMovie', addMovieHandler);
+app.post('/addMovie', addMovieHandler);
 
 app.get('/getMovie', getMovieHandler);
 
@@ -60,6 +60,7 @@ function addMovieHandler(req, res) {
     client.query(sql, values).then((result) => {
         return res.status(201).json(result.rows);
     })
+
 
 
 };
