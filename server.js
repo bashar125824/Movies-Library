@@ -41,9 +41,11 @@ app.get('/review', reviewHandler);
 
 app.get('/watch', watchHandler);
 
+
 app.get('/addMovie', addMovieHandler);
 
 app.get('/getMovie', getMovieHandler);
+
 
 app.use("*", notFoundHandler);
 
@@ -94,16 +96,19 @@ function trendingHandler(req, res) {
 function searchHandler(request, response) {
     const searching = request.query.original_title;
     let arr = [];
-    axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${MYAPIKEY}&language=en-US&query=${searching}&page=2`)
+    axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${MYAPIKEY}&language=en-US&query=${searching}1&include_adult=false`)
         .then(apiResponse => {
-            // console.log(apiResponse);
-            apiResponse.data.results.map(value => {
-                let theMovie = value.results;
-                result.push(theMovie);
-            })
-            return response.status(200).json(arr);
+
+            console.log(apiResponse);
+
+
+            let theResponse = new Movie(apiResponse.page, apiResponse.data.poster_path, apiResponse.data.adult, apiResponse.data.overview, apiResponse.data.release_date, apiResponse.datagenre_ids);
+
+
+            return response.status(200).json(theResponse);
+
         }).catch(error => {
-            errorHandler(error, request, response);
+            errorHandler(error, req, res);
         })
 
 
@@ -111,16 +116,21 @@ function searchHandler(request, response) {
 
 function reviewHandler(req, res) {
     let reviewId = req.query.id;
+    //58aa82f09251416f92006a3a   <- USE THIS ID
 
     let result = [];
 
     axios.get(`https://api.themoviedb.org/3/review/${reviewId}?api_key=${MYAPIKEY}`)
         .then(apiResponse => {
-            apiResponse.data.results.map(value => {
-                let theMovie = new Movie(value.id, value.title, value.release_date, value.poster_path, value.overview);
-                result.push(theMovie);
-            })
-            return res.status(200).json(result);
+            console.log(apiResponse);
+
+
+            let response = new Movie(apiResponse.data.id, apiResponse.data.author, apiResponse.data.author_details, apiResponse.data.content, apiResponse.data.overview);
+
+
+
+
+            return res.status(200).json(response);
         }).catch(error => {
             errorHandler(error, req, res);
         })
@@ -175,7 +185,7 @@ function favoriteHandler(req, res) {
 function errorHandler(error, requesting, responsing) {
     const err = {
         status: 500,
-        message: error
+        message: error.message
     }
     return responsing.status(500).send(err);
 }
