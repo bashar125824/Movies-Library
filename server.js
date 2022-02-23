@@ -42,7 +42,7 @@ app.get('/review', reviewHandler);
 app.get('/watch', watchHandler);
 
 
-app.get('/addMovie', addMovieHandler);
+app.post('/addMovie', addMovieHandler);
 
 app.get('/getMovie', getMovieHandler);
 
@@ -55,11 +55,13 @@ app.use(errorHandler);
 function addMovieHandler(req, res) {
     const movie = req.body;
     console.log(movie);
-    const sql = `INSERT INTO movieTable(title, release_date, poster_path , overview) VALUES($1, $2, $3, $4) RETURNING *`
+    const sql = `INSERT INTO movieTable(title, release_date, poster_path , overview , comments) VALUES($1, $2, $3, $4, $5) RETURNING *`
     const values = [movie.title, movie.release_date, movie.poster_path, movie.overview]
     client.query(sql, values).then((result) => {
         return res.status(201).json(result.rows);
-    })
+    }).catch((error) => {
+        errorHandler(error, req, res);
+    });
 
 
 };

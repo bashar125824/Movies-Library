@@ -2,7 +2,7 @@
 
 # Project Name - Project Version
 
-**Author Name**: ### Bashar Alrefae
+**Author Name**: **Bashar Alrefae**
 
 ## WRRC
 
@@ -13,9 +13,9 @@
 
 ## Getting Started
 
-***1-  User should use the website URL to get the website ***
+**1-  User should use the website URL to get the website**
 
-***2-  User can benefits from the app features by specifying the endpoint like this : /endpoint *** 
+**2-  User can benefits from the app features by specifying the endpoint like this : /endpoint**
 
 ## Project Features
 
