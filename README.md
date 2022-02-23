@@ -1,5 +1,14 @@
 # Movies-Library
 
+## NEW Project Features :
+
+1- User can **update** a movie by id using **/UPDATE/id**
+
+1- User can **delete** a movie by id using **/DELETE/id**
+
+1- User can **get** a movie by id using **/getMovie/id**
+
+
 # Project Name - Project Version
 
 **Author Name**: **Bashar Alrefae**
