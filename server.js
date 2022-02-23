@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require("express");
-
+const cors = require('cors');
 const movies = require("./MovieData/data.json");
 const dotenv = require("dotenv");
 const axios = require("axios");
@@ -10,6 +10,8 @@ const pg = require("pg");
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 const MYAPIKEY = process.env.MYAPIKEY;
 const PORT = process.env.PORT;
@@ -56,7 +58,7 @@ function addMovieHandler(req, res) {
     const movie = req.body;
     console.log(movie);
     const sql = `INSERT INTO movieTable(title, release_date, poster_path , overview , comments) VALUES($1, $2, $3, $4, $5) RETURNING *`
-    const values = [movie.title, movie.release_date, movie.poster_path, movie.overview]
+    const values = [movie.title, movie.release_date, movie.poster_path, movie.overview , movie.comments]
     client.query(sql, values).then((result) => {
         return res.status(201).json(result.rows);
     }).catch((error) => {
@@ -169,7 +171,7 @@ function homeHandler(request, response) {
 
 
 
-    let Summary = new Movie(data.title, data.poster_path, data.overview);
+    let Summary = new Movie(movies.title, movies.poster_path, movies.overview);
 
 
     return response.status(200).json(Summary);
