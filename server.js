@@ -45,11 +45,11 @@ app.post('/addMovie', addMovieHandler);
 
 app.get('/getMovie', getMovieHandler);
 
-app.put("/UPDATE/id", updateHandler);
+app.put("/UPDATE/:id", updateHandler);
 
-app.delete("/DELETE/id", deleteHandler);
+app.delete("/DELETE/:id", deleteHandler);
 
-app.get("getMovie/id", getMovieIdHandler)
+app.get("/getMovie/:id", getMovieIdHandler)
 
 app.use("*", notFoundHandler);
 
@@ -59,14 +59,16 @@ function updateHandler(req, res) {
     const id = req.params.id;
     const movie = req.body;
 
+    console.log(movie);
     const sql = `UPDATE movieTable SET title=$1, release_date=$2 , poster_path=$3 , overview=$4 , comments=$5 WHERE id=$6 RETURNING *;`;
     const values = [movie.title, movie.release_date, movie.poster_path, movie.overview, movie.comments, id];
 
     client.query(sql, values).then((result) => {
-        return res.status(200).json(result.rows);
+        return res.status(200).json(result);
     }).catch((error) => {
         errorHandler(error, req, res);
     })
+   
 
 };
 
@@ -90,7 +92,7 @@ function getMovieIdHandler(req, res) {
     const values = [id];
 
     client.query(sql, values).then((result) => {
-        return res.status(200).json(result.rows);
+        return res.status(200).json(result);
     }).catch((error) => {
         errorHandler(error, req, res)
     })
@@ -213,7 +215,7 @@ function homeHandler(request, response) {
 
 
 
-    let Summary = new Movie(movies.title, data.poster_path, data.overview);
+    let Summary = new Movie(movies.title, movies.poster_path, movies.overview);
 
 
     return response.status(200).json(Summary);
