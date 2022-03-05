@@ -6,10 +6,13 @@ const movies = require("./MovieData/data.json");
 const dotenv = require("dotenv");
 const axios = require("axios");
 const pg = require("pg");
+const cors = require("cors");
+
 
 dotenv.config();
 
 const app = express();
+
 
 const MYAPIKEY = process.env.MYAPIKEY;
 const PORT = process.env.PORT;
@@ -28,6 +31,9 @@ function Movie(id, title, release_date, poster_path, overview) {
 };
 
 app.use(express.json());
+
+app.use(cors());
+
 
 app.get('/', homeHandler);
 
