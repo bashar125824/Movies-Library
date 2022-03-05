@@ -18,7 +18,7 @@ const MYAPIKEY = process.env.MYAPIKEY;
 const PORT = process.env.PORT;
 const DATABASE_URL = process.env.DATABASE_URL;
 
-//const client = new pg.Client(DATABASE_URL);
+const client = new pg.Client(DATABASE_URL);
 
 function Movie(id, title, release_date, poster_path, overview) {
 
