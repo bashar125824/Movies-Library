@@ -13,6 +13,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors());
 
 const MYAPIKEY = process.env.MYAPIKEY;
 const PORT = process.env.PORT;
@@ -32,7 +33,7 @@ function Movie(id, title, release_date, poster_path, overview) {
 
 app.use(express.json());
 
-app.use(cors());
+
 
 
 app.get('/', homeHandler);
